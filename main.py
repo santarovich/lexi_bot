@@ -39,6 +39,8 @@ def set_user_language(chat_id, language):
 @app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
+    print("Received data:", data)
+    
     if "message" in data and "text" in data["message"]:
         chat_id = data["message"]["chat"]["id"]
         user_message = data["message"]["text"]
