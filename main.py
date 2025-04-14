@@ -44,7 +44,6 @@ def webhook():
     if "message" in data and "text" in data["message"]:
         chat_id = data["message"]["chat"]["id"]
         user_message = data["message"]["text"]
-        print("User message:", user_message)
 
         if user_message.startswith("/start"):
             send_message(chat_id, "Welcome to Lexi! Please type your preferred language code (e.g., `en`, `ru`, `es`, `fr`, `de`).")
@@ -53,33 +52,9 @@ def webhook():
             send_message(chat_id, f"Language set to {user_message.strip()}. Send me text to translate.")
         else:
             lang = get_user_language(chat_id)
-            print("Target language:", lang)
             translated = GoogleTranslator(source='auto', target=lang).translate(user_message)
-            print("Translated text:", translated)
             send_message(chat_id, f"Translation: {translated}")
-    else:
-        print("No message or text found in data")
-
     return {"ok": True}
-            chat_id = data["message"]["chat"]["id"]
-            user_message = data["message"]["text"]
-
-            if user_message.startswith("/start"):
-                send_message(chat_id, "Welcome to Lexi! Please type your preferred language code (e.g., `en`, `ru`, `es`, `fr`, `de`).")
-            elif len(user_message.strip()) == 2:
-                # Если это язык (по коду)
-                set_user_language(chat_id, user_message.strip())
-                send_message(chat_id, f"Language set to {user_message.strip()}. Send me text to translate.")
-            else:
-                lang = get_user_language(chat_id)
-                translated = GoogleTranslator(source='auto', target=lang).translate(user_message)
-                send_message(chat_id, f"Translation: {translated}")
-                
-        return '', 200  # <-- возвращаем пустой ответ с 200 OK, чтобы Telegram не ругался
-
-    except Exception as e:
-        print("Error in webhook:", str(e))
-        return 'Error', 500
 
 @app.route("/", methods=["GET"])
 def index():
